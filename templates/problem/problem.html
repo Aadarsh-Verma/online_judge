@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_editor.css' %}">
+    <div id="editor" style="height: 400px;width: 800px;margin-top: 50px">def test(x):
+    print(x)
+x = input()
+test(x)
+    </div>
+    <div class="container">
+        <div class="editor__footer">
+            <div class="editor__footer--left">
+                <button class="editor__btn editor__run">Run</button>
+                <button class="editor__btn editor__reset">Reset</button>
+            </div>
+            <div class="editor__footer--right">
+                Provide Custom Input
+                <div id="editor__input" class="editor__console">
+                    <ul class="editor__console-logs"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    OUTPUT:<br>
+    <span id="output__container">
+    </span>
+
+    {% include 'problem/editor_js.html' %}
+
+{% endblock content %}
