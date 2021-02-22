@@ -64,9 +64,9 @@ html, body {
     cursor: pointer;
 }
 
-.editor__console {
-    background-color: #fff;
-    width: 100%;
+#editor__input {
+    /*background-color: #fff;*/
+    width: 500px;
     height: 130px;
     margin-top: .9em;
     border: 1px solid;

@@ -5,20 +5,19 @@
 
         function setEditor() {
             editor.setTheme("ace/theme/monokai");
-            editor.session.setMode("ace/mode/javascript");
+            editor.session.setMode("ace/mode/python");
             editor.setOptions({
                 autoScrollEditorIntoView: true,
                 copyWithEmptySelection: true,
             });
 // use setOptions method
             editor.setOption("mergeUndoDeltas", "always");
-            editor.session.setMode("ace/mode/javascript");
             editor.session.setTabSize(4);
             editor.setHighlightActiveLine(true);
         };
         function setEditor_Input() {
             editor_input.setTheme("ace/theme/monokai");
-            editor_input.session.setMode("ace/mode/javascript");
+            {#editor_input.session.setMode("ace/mode/javascript");#}
             editor_input.setOptions({
                 autoScrollEditorIntoView: true,
                 copyWithEmptySelection: true,
@@ -32,14 +31,18 @@
 
         executeCodeBtn.addEventListener('click', () => {
             // Get input from the code editor
-            var userCode = editor.getValue();
-            var userInput = editor_input.getValue();
-            console.log(userInput)
+            var userCode = editor.getValue().trim();
+            var userInput = editor_input.getValue().trim();
             // Run the user code
             let formData = new FormData();
             formData.append('code', userCode);
-            formData.append('input', userInput)
-            console.log(formData)
+            if (userInput) {
+                formData.append('input', userInput)
+                console.log(userInput)
+            }
+            else{
+                formData.append('input',null)
+            }
             if (formData) {
                 $.ajax({
                     url: '{% url "runcode"%}',

@@ -22,6 +22,7 @@ def calculate(request):
     else:
         return JsonResponse({'status': 0})
 
+
 @csrf_exempt
 def runcode(request):
     print("runcode called")
@@ -30,6 +31,7 @@ def runcode(request):
         input_part = request.POST['input']
         y = input_part
         input_part = input_part.replace("\n", " ").split(" ")
+        print(input_part[0])
 
         def input():
             a = input_part[0]
