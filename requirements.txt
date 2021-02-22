@@ -1,36 +1,6 @@
-asgiref @ file:///tmp/build/80754af9/asgiref_1605055780383/work
-astroid==2.4.2
-autopep8==1.5.4
-backcall==0.2.0
+asgiref==3.3.1
 certifi==2020.12.5
-colorama==0.4.3
-decorator==4.4.2
-Django @ file:///tmp/build/80754af9/django_1613762073373/work
-flake8==3.8.3
-ipykernel==5.3.4
-ipython==7.18.1
-ipython-genutils==0.2.0
-jedi==0.17.2
-jupyter-client==6.1.7
-jupyter-core==4.6.3
-mccabe==0.6.1
-parso==0.7.1
-pickleshare==0.7.5
-prompt-toolkit==3.0.7
-psycopg2 @ file:///C:/ci/psycopg2_1612298803839/work
-pycodestyle==2.6.0
-pyflakes==2.2.0
-pylint==2.6.0
-python-dateutil==2.8.1
-pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
-pywin32==228
-pyzmq==19.0.2
-rope==0.17.0
-six==1.15.0
-sqlparse @ file:///tmp/build/80754af9/sqlparse_1602184451250/work
-toml==0.10.1
-tornado==6.0.4
-traitlets==5.0.4
-wcwidth==0.2.5
+Django==3.1.7
+pytz==2021.1
+sqlparse==0.4.1
 wincertstore==0.2
-wrapt==1.12.1
