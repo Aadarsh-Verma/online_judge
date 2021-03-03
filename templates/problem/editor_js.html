@@ -2,10 +2,13 @@
     $(document).ready(function () {
         var editor = ace.edit("editor");
         var editor_input = ace.edit("editor__input");
+        var language = document.querySelector('#language').value
+        console.log(language)
 
-        function setEditor() {
+        function setEditor(language) {
             editor.setTheme("ace/theme/monokai");
-            editor.session.setMode("ace/mode/python");
+            const url = "ace/mode/" + language
+            editor.session.setMode(url);
             editor.setOptions({
                 autoScrollEditorIntoView: true,
                 copyWithEmptySelection: true,
@@ -15,6 +18,7 @@
             editor.session.setTabSize(4);
             editor.setHighlightActiveLine(true);
         };
+
         function setEditor_Input() {
             editor_input.setTheme("ace/theme/monokai");
             {#editor_input.session.setMode("ace/mode/javascript");#}
@@ -23,14 +27,22 @@
                 copyWithEmptySelection: true,
             });
         };
-        setEditor();
+
         setEditor_Input();
+        $("#setLanguage").click(function () {
+            language = document.querySelector('#language').value
+            setEditor(language)
+        })
+
 
         const executeCodeBtn = document.querySelector('.editor__run');
         const resetCodeBtn = document.querySelector('.editor__reset');
 
         executeCodeBtn.addEventListener('click', () => {
             // Get input from the code editor
+            const language = document.querySelector('#language').value;
+
+            console.log(language)
             var userCode = editor.getValue().trim();
             var userInput = editor_input.getValue().trim();
             // Run the user code
@@ -38,22 +50,21 @@
             formData.append('code', userCode);
             if (userInput) {
                 formData.append('input', userInput)
+            } else {
+                formData.append('input', null)
             }
-            else{
-                formData.append('input',null)
-            }
+            formData.append('language', language)
             if (formData) {
                 $.ajax({
                     url: '{% url "runcode"%}',
                     method: 'POST',
                     data: formData,
-                    dataType : 'json',
+                    dataType: 'json',
                     processData: false,
                     contentType: false,
                     success: function (data) {
                         console.log(data)
                         $('#output__container').html(data.data['output'])
-                        console.log("output is "+data.data['output']);
                     }
 
                 });

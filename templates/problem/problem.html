@@ -1,12 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-{% load static %}
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style_editor.css' %}">
-    <div id="editor" style="height: 400px;width: 800px;margin-top: 50px">def test(x):
-    print(x)
-x = input()
-test(x)
+    {#    LANGUAGE SELECTOR DROPDOWN#}
+    <br>
+    <button id="setLanguage">
+        <select id="language" name="cars">
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="c_cpp">C++</option>
+        </select>
+    </button>
+    <br>
+    {#    EDITOR#}
+    <div id="editor" style="height: 400px;width: 800px;margin-top: 50px">def test():
+        x = input()
+        print(x)
+test()
     </div>
+
+    {#    FOOTER#}
     <div class="container">
         <div class="editor__footer">
             <div class="editor__footer--left">
