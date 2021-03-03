@@ -33,4 +33,4 @@ def runcode(request):
         input_part = request.POST['input']
         output = get_output(code_part,input_part)
         print(output['run_status'])
-        return JsonResponse({'output': output['run_status']})
+        return JsonResponse({'data': output['run_status']})

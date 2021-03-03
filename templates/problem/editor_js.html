@@ -38,7 +38,6 @@
             formData.append('code', userCode);
             if (userInput) {
                 formData.append('input', userInput)
-                console.log(userInput)
             }
             else{
                 formData.append('input',null)
@@ -52,8 +51,9 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        $('#output__container').html(data['output'])
-                        console.log(data);
+                        console.log(data)
+                        $('#output__container').html(data.data['output'])
+                        console.log("output is "+data.data['output']);
                     }
 
                 });
