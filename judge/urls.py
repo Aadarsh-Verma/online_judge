@@ -4,5 +4,4 @@ from judge import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-
 ]

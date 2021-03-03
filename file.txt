@@ -1,1 +1,1 @@
-5
+{'memory_used': '64', 'time_limit': 5, 'output_html': '5&nbsp;5<br>', 'memory_limit': 262144, 'time_used': '0.101543', 'signal': 'OTHER', 'exit_code': '0', 'status_detail': 'NA', 'status': 'AC', 'stderr': '', 'output': '5 5\n', 'async': 0, 'request_NOT_OK_reason': '', 'request_OK': 'True'}

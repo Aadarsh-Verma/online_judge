@@ -23,7 +23,6 @@ from judge import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('judge.urls')),
-    path('calculate/', views.calculate, name='calculate'),
     path('runcode/', views.runcode, name='runcode'),
 
 ]

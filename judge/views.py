@@ -1,27 +1,29 @@
-import sys
-
 from django.http import JsonResponse
 from django.shortcuts import render
-
+import requests
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
 
+def get_output(code_part, input_part):
+    RUN_URL = u'https://api.hackerearth.com/v3/code/run/'
+    CLIENT_SECRET = '846b9673047638b7626eeb9dc65022312791cb44'
+
+    data = {
+        'client_secret': CLIENT_SECRET,
+        'async': 0,
+        'source': code_part,
+        'input': input_part,
+        'lang': "PYTHON3",
+        'time_limit': 5,
+        'memory_limit': 262144,
+    }
+    r = requests.post(RUN_URL, data=data)
+    return r.json()
+
 def index(request):
     context = {}
     return render(request, 'problem/problem.html', context)
-
-
-@csrf_exempt
-def calculate(request):
-    if request.method == "POST":
-        code = request.POST
-        print(code)
-
-        return JsonResponse({'status': 1})
-    else:
-        return JsonResponse({'status': 0})
-
 
 @csrf_exempt
 def runcode(request):
@@ -29,25 +31,6 @@ def runcode(request):
     if request.method == 'POST':
         code_part = request.POST['code']
         input_part = request.POST['input']
-        y = input_part
-        input_part = input_part.replace("\n", " ").split(" ")
-        print(input_part[0])
-
-        def input():
-            a = input_part[0]
-            del input_part[0]
-            return a
-
-        try:
-            orig_stdout = sys.stdout
-            sys.stdout = open('file.txt', 'w')
-            exec(code_part)
-            sys.stdout.close()
-            sys.stdout = orig_stdout
-            output = open('file.txt', 'r').read()
-        except Exception as e:
-            sys.stdout.close()
-            sys.stdout = orig_stdout
-            output = e
-        print(output)
-        return JsonResponse({'output': output})
+        output = get_output(code_part,input_part)
+        print(output['run_status'])
+        return JsonResponse({'output': output['run_status']})
