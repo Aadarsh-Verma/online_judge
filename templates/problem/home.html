@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+    <br>
+    <h1><a href="{% url 'createquestion' %}">Create Question</a></h1>
+    <br><br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Question Code</th>
+                <th>Question Name</th>
+                <th>Add TestCase</th>
+                <th>Solve</th>
+            </tr>
+        </thead>
+        {% for question in questions %}
+            <tr>
+                <td>{{ question.code }}</td>
+                <td>{{ question.name }}</td>
+                <td><a class="btn btn-primary" href="{% url 'addtestcase' %}">Add Test Case</a></td>
+                <td><a class="btn btn-secondary" href="{% url 'submitcode' question.code %}">Solve</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

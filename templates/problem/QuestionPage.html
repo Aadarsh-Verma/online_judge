@@ -1,9 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-center">{{ question.code }}-{{ question.name }}</h2>
+
+<div class="container-fluid mt-3">
+    <h4>{{ question.problem }}</h4>
+</div>
+<button id="setLanguage">
+    <select id="language" name="cars">
+        <option value="python">Python</option>
+        <option value="java">Java</option>
+        <option value="c_cpp">C++</option>
+    </select>
+</button>
+<br>
+{#    EDITOR#}
+<div id="editor" style="height: 400px;width: 800px;margin-top: 50px">def test():
+    x = input()
+    print(x)
+    test()
+</div>
+
+<button id="submit_code" class="btn btn-primary mt-4">Submit Code</button>
+
+<div id="output">
+</div>
+<div id="endpoint-url-div" url="{% url 'submitcode' question.code %}" style="display: none;"></div>
+
 <script>
     $(document).ready(function () {
         var editor = ace.edit("editor");
-        var editor_input = ace.edit("editor__input");
         var language = document.querySelector('#language').value
-        console.log(language)
+
 
         function setEditor(language) {
             editor.setTheme("ace/theme/monokai");
@@ -13,50 +40,32 @@
                 autoScrollEditorIntoView: true,
                 copyWithEmptySelection: true,
             });
-// use setOptions method
+            // use setOptions method
             editor.setOption("mergeUndoDeltas", "always");
             editor.session.setTabSize(4);
             editor.setHighlightActiveLine(true);
         };
 
-        function setEditor_Input() {
-            editor_input.setTheme("ace/theme/monokai");
-            {#editor_input.session.setMode("ace/mode/javascript");#}
-            editor_input.setOptions({
-                autoScrollEditorIntoView: true,
-                copyWithEmptySelection: true,
-            });
-        };
-
-        setEditor_Input();
         $("#setLanguage").click(function () {
             language = document.querySelector('#language').value
             setEditor(language)
         })
 
 
-        const executeCodeBtn = document.querySelector('.editor__run');
-        const resetCodeBtn = document.querySelector('.editor__reset');
+        const executeCodeBtn = document.querySelector('#submit_code');
 
         executeCodeBtn.addEventListener('click', () => {
-            // Get input from the code editor
+            console.log("submit called")
             const language = document.querySelector('#language').value;
-
             console.log(language)
             var userCode = editor.getValue().trim();
-            var userInput = editor_input.getValue().trim();
-            // Run the user code
             let formData = new FormData();
             formData.append('code', userCode);
-            if (userInput) {
-                formData.append('input', userInput)
-            } else {
-                formData.append('input', null)
-            }
-            formData.append('language', language)
+            formData.append('language', language);
+            const url = document.getElementById('endpoint-url-div').getAttribute('url');
             if (formData) {
                 $.ajax({
-                    url: '{% url "runcode"%}',
+                    url: url,
                     method: 'POST',
                     data: formData,
                     dataType: 'json',
@@ -64,7 +73,7 @@
                     contentType: false,
                     success: function (data) {
                         console.log(data)
-                        $('#output__container').html(data.data)
+                        $('#output').html(data['result'])
                     }
 
                 });
@@ -73,3 +82,4 @@
     });
 
 </script>
+{% endblock content %}

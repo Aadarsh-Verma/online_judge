@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        Enter Problem Code<input type="text" name="code" class="form-control">
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Upload File Testcase</label>
+            <input name="testcase" type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Upload Answer File</label>
+            <input name="answer" type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+        <input class="btn btn-primary mt-5" type="submit">
+    </form>
+
+{% endblock content %}
