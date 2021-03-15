@@ -45,7 +45,7 @@ def get_output(code_part, input_part, input_lang):
         'memory_limit': 262144,
     }
     r = requests.post(RUN_URL, data=data)
-    return r.json()['run_status']['output']
+    return r.json()['run_status']
 
 
 def index(request):
@@ -71,11 +71,10 @@ def addTestCase(request):
         code = request.POST.get('code')
         answer = request.FILES['answer'].read()
         testcase = request.FILES['testcase'].read()
-        print(answer)
+        print(testcase)
         answer = answer.decode("utf-8")
         testcase = testcase.decode("utf-8")
-        print(answer)
-        print(len(answer))
+        print(testcase)
         question = Question.objects.get(code__exact=code)
         TestCase.objects.create(question=question, text=testcase, answer=answer)
         return redirect('home')
@@ -94,7 +93,11 @@ def submitcode(request, code):
         for i in range(0, len(testcases)):
             code_output = get_output(code_part, testcases[i].text, input_lang)
             print(code_output)
-            if judge(code_output, testcases[i].answer):
+            if code_output['status'] == 'RE':
+                return JsonResponse({'result':"Error in your Code:<br>"+code_output['stderr']})
+            if code_output['status'] == 'CE':
+                return JsonResponse({'result': "Your Code Did Not Compile Successfully"})
+            if judge(code_output['output'], testcases[i].answer):
                 result.append("Test Case No {0} Passed<br>".format(i))
             else:
                 result.append("Test Case No {0} Failed<br>".format(i))
