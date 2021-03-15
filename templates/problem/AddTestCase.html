@@ -2,6 +2,8 @@
 {% block content %}
     <form enctype="multipart/form-data" method="POST">
         {% csrf_token %}
+        <br>
+        <br>
         Enter Problem Code<input type="text" name="code" class="form-control">
         <div class="form-group">
             <label for="exampleFormControlFile1">Upload File Testcase</label>
