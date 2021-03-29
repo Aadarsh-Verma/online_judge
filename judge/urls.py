@@ -7,5 +7,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('addtestcase/', views.addTestCase, name='addtestcase'),
     path('code/<str:code>', views.submitcode, name='submitcode'),
-    path('createquestion',views.createQuestion, name = 'createquestion')
+    path('createquestion', views.createQuestion, name='createquestion'),
+    path('contestCreate', views.ContestCreate, name='contestcreate'),
+    path('addContestContest<pk>', views.addQuestion, name='addContestQuestion'),
+
 ]

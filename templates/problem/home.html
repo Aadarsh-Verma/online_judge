@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<br>
+    <br>
 
     <h1><a href="{% url 'createquestion' %}">Create Question</a></h1>
     <br><br>
@@ -23,4 +23,33 @@
         {% endfor %}
     </table>
 
+    <h2><a href="{% url 'contestcreate' %}">Create Contest</a></h2>
+    <table class="table">
+        {% for contest in contests %}
+            <tr>
+                <td>{{ contest.name }}</td>
+                <td>{{ contest.duration }}</td>
+                <td>{{ contest.start_time }}</td>
+                <td>
+                    {% for question in contest.question.all %}
+                        {{ question.name }} ,
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'addContestQuestion' contest.id %}" class="btn btn-warning">
+                    Add Question</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>Submissions</h2>
+    <table class="table">
+        {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.question.name }}</td>
+                <td>{{ submission.user.username }}</td>
+                <td>{{ submission.status }}</td>
+                <td>{{ submission.language }}</td>
+                <td>{{ submission.date }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

@@ -63,8 +63,8 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        console.log(data)
-                        $('#output__container').html(data.data)
+                        console.log(data.data)
+                        $('#output__container').html(data.data['output'])
                     }
 
                 });

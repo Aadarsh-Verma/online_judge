@@ -1,11 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-import requests
-# Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-
 from judge.forms import QuestionCreateForm
-from judge.models import TestCase, Question
+from judge.models import TestCase, Question, Contest, Submission
+import requests
 
 
 def judge(code_output, correct_output):
@@ -45,6 +44,7 @@ def get_output(code_part, input_part, input_lang):
         'memory_limit': 262144,
     }
     r = requests.post(RUN_URL, data=data)
+    print(r)
     return r.json()['run_status']
 
 
@@ -59,10 +59,11 @@ def runcode(request):
     if request.method == 'POST':
         code_part = request.POST['code']
         input_part = request.POST['input']
+        print(input_part)
         input_lang = request.POST['language']
-        output = get_output(code_part, input_part, input_lang)
-        print(output)
-        return JsonResponse({'data': output})
+        data = get_output(code_part, input_part, input_lang)
+        print(data)
+        return JsonResponse({'data': data})
 
 
 def addTestCase(request):
@@ -80,7 +81,7 @@ def addTestCase(request):
         return redirect('home')
     return render(request, 'problem/AddTestCase.html', context)
 
-
+@login_required
 @csrf_exempt
 def submitcode(request, code):
     print("submit code called")
@@ -90,19 +91,25 @@ def submitcode(request, code):
         input_lang = request.POST['language']
         testcases = TestCase.objects.filter(question=question)
         result = []
+
+        submission_testcase = ""
         for i in range(0, len(testcases)):
             code_output = get_output(code_part, testcases[i].text, input_lang)
-            print(code_output)
+            print("code output is "+code_output)
             if code_output['status'] == 'RE':
-                return JsonResponse({'result':"Error in your Code:<br>"+code_output['stderr']})
+                return JsonResponse({'result': "Error in your Code:<br>" + code_output['stderr']})
             if code_output['status'] == 'CE':
                 return JsonResponse({'result': "Your Code Did Not Compile Successfully"})
             if judge(code_output['output'], testcases[i].answer):
                 result.append("Test Case No {0} Passed<br>".format(i))
+                submission_testcase += "Passed, "
             else:
                 result.append("Test Case No {0} Failed<br>".format(i))
+                submission_testcase += "Failed, "
         response = {'result': result}
         print(result)
+        Submission.objects.create(user=request.user, question=question, status="CE",
+                                  testcase=submission_testcase,code=code_part,language=input_lang )
         return JsonResponse(response)
 
     context = {'question': question}
@@ -121,7 +128,45 @@ def createQuestion(request):
 
 
 def home(request):
-    questions = Question.objects.all()
-    context = {'questions': questions}
+    questions_set = Question.objects.all()
+    submissions = Submission.objects.all()
+    contests = Contest.objects.all()
+    context = {
+        'questions': questions_set,
+        'contests': contests,
+        'submissions':submissions,
+    }
 
     return render(request, 'problem/home.html', context)
+
+
+def ContestCreate(request):
+    questions = Question.objects.all()
+    if request.method == 'POST':
+        form = request.POST
+        name = form.get('name')
+        start_time = form.get('start_time')
+        duration = form.get('duration')
+        contest = Contest.objects.create(name=name, start_time=start_time, duration=duration)
+
+        return redirect('home')
+    context = {'questions': questions}
+    return render(request, 'judge/contest_create.html', context)
+
+
+def addQuestion(request, pk):
+    contest = Contest.objects.get(id=pk)
+    question_set = Question.objects.all()
+    if request.method == 'POST':
+        question_ids = request.POST.getlist('question_ids')
+        print(question_ids)
+        question_set = []
+        for q_id in question_ids:
+            question_set.append(Question.objects.get(id=q_id))
+        for question in question_set:
+            contest.question.add(question)
+        return redirect('home')
+    context = {
+        'questions': question_set
+    }
+    return render(request, 'judge/addQuestion.html', context)

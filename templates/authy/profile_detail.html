@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+    <a class="btn btn-primary mt-5"href="{% url 'editProfile' %}">Edit Profile</a>
+    <h2>{{ object.user.username }}</h2>
+    <h5>{{ object.email }}</h5>
+    <h5>{{ object.first_name }}</h5>
+    <h5>{{ object.last_name }}</h5>
+    <img src="{{ object.picture.url }}">
+    <h5>{{ object.bio }}</h5>
+    <h5>{{ object.college }}</h5>
+    <h2>Submissions</h2>
+    <table class="table">
+    {% for submission in submissions %}
+        <tr>
+            <td>{{ submission.question.name }}</td>
+                <td>{{ submission.user.username }}</td>
+                <td>{{ submission.status }}</td>
+                <td>{{ submission.language }}</td>
+                <td>{{ submission.date }}</td>
+        </tr>
+
+    {% endfor %}
+    </table>
+{% endblock content %}
