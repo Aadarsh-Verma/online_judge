@@ -81,6 +81,7 @@ def addTestCase(request):
         return redirect('home')
     return render(request, 'problem/AddTestCase.html', context)
 
+
 @login_required
 @csrf_exempt
 def submitcode(request, code):
@@ -95,10 +96,15 @@ def submitcode(request, code):
         submission_testcase = ""
         for i in range(0, len(testcases)):
             code_output = get_output(code_part, testcases[i].text, input_lang)
-            print("code output is "+code_output)
+            print("code output is ")
+            print(code_output)
             if code_output['status'] == 'RE':
+                Submission.objects.create(user=request.user, question=question, status="Runtime Error",
+                                          testcase=submission_testcase, code=code_part, language=input_lang)
                 return JsonResponse({'result': "Error in your Code:<br>" + code_output['stderr']})
             if code_output['status'] == 'CE':
+                Submission.objects.create(user=request.user, question=question, status="Compile Error",
+                                          testcase=submission_testcase, code=code_part, language=input_lang)
                 return JsonResponse({'result': "Your Code Did Not Compile Successfully"})
             if judge(code_output['output'], testcases[i].answer):
                 result.append("Test Case No {0} Passed<br>".format(i))
@@ -108,8 +114,8 @@ def submitcode(request, code):
                 submission_testcase += "Failed, "
         response = {'result': result}
         print(result)
-        Submission.objects.create(user=request.user, question=question, status="CE",
-                                  testcase=submission_testcase,code=code_part,language=input_lang )
+        Submission.objects.create(user=request.user, question=question, status="AC",
+                                  testcase=submission_testcase, code=code_part, language=input_lang)
         return JsonResponse(response)
 
     context = {'question': question}
@@ -134,7 +140,7 @@ def home(request):
     context = {
         'questions': questions_set,
         'contests': contests,
-        'submissions':submissions,
+        'submissions': submissions,
     }
 
     return render(request, 'problem/home.html', context)

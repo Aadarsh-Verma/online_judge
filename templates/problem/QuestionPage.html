@@ -1,88 +1,97 @@
 {% extends 'base.html' %}
 {% block content %}
-<br>
-<br>
-<h2 class="text-center">{{ question.code }}-{{ question.name }}</h2>
+    <br>
+    <br>
+    <h2 class="text-center">{{ question.code }}-{{ question.name }}</h2>
 
-<div class="container-fluid mt-3">
-    <h4>{{ question.problem }}</h4>
-</div>
-<button id="setLanguage">
-    <select id="language" name="cars">
-        <option value="python">Python</option>
-        <option value="java">Java</option>
-        <option value="c_cpp">C++</option>
-    </select>
-</button>
-<br>
-{#    EDITOR#}
-<div id="editor" style="height: 400px;width: 800px;margin-top: 50px">def test():
-    x = input()
-    print(x)
-    test()
-</div>
+    <div class="container-fluid mt-3">
+        <h5>{{ question.problem | safe }}</h5>
+    </div>
+    <br>
+    <div class="container">
+        <span class="header__editor" style="background-color: #007bff">
+            <button id="setLanguage">
+                <select id="language" name="cars">
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                    <option value="c_cpp">C++</option>
+                </select>
+            </button>
+        </span>
+        <br>
+        {#    EDITOR#}
+        <div id="editor" style="height: 400px;width: 800px;margin-top: 5px">import java.util.*;
+class Test{
+   public static void main(String[] args){
+       Scanner sc = new Scanner(System.in);
+   }
+}
+        </div>
+    </div>
 
-<button id="submit_code" class="btn btn-primary mt-4">Submit Code</button>
+    <button id="submit_code" class="btn btn-primary mt-4">Submit Code</button>
 
-<div id="output">
-</div>
-<div id="endpoint-url-div" url="{% url 'submitcode' question.code %}" style="display: none;"></div>
+    <div id="output">
+    </div>
+    <div id="endpoint-url-div" url="{% url 'submitcode' question.code %}" style="display: none;"></div>
 
-<script>
-    $(document).ready(function () {
-        var editor = ace.edit("editor");
-        var language = document.querySelector('#language').value
-
-
-        function setEditor(language) {
-            editor.setTheme("ace/theme/monokai");
-            const url = "ace/mode/" + language
-            editor.session.setMode(url);
-            editor.setOptions({
-                autoScrollEditorIntoView: true,
-                copyWithEmptySelection: true,
-            });
-            // use setOptions method
-            editor.setOption("mergeUndoDeltas", "always");
-            editor.session.setTabSize(4);
-            editor.setHighlightActiveLine(true);
-        };
-
-        $("#setLanguage").click(function () {
-            language = document.querySelector('#language').value
-            setEditor(language)
-        })
+    <script>
+        $(document).ready(function () {
+            var editor = ace.edit("editor");
+            var language = document.querySelector('#language').value
 
 
-        const executeCodeBtn = document.querySelector('#submit_code');
-
-        executeCodeBtn.addEventListener('click', () => {
-            console.log("submit called")
-            const language = document.querySelector('#language').value;
-            console.log(language)
-            var userCode = editor.getValue().trim();
-            let formData = new FormData();
-            formData.append('code', userCode);
-            formData.append('language', language);
-            const url = document.getElementById('endpoint-url-div').getAttribute('url');
-            if (formData) {
-                $.ajax({
-                    url: url,
-                    method: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        console.log(data)
-                        if(data['result'])
-                        $('#output').html(data['result'])
-                    }
-
+            function setEditor(language) {
+                {#console.log("setting editor for lang "+language)#}
+                editor.setTheme("ace/theme/monokai");
+                const url = "ace/mode/" + language
+                editor.session.setMode(url);
+                editor.setOptions({
+                    autoScrollEditorIntoView: true,
+                    copyWithEmptySelection: true,
                 });
-            }
-        });
-    });
+                // use setOptions method
+                editor.setOption("mergeUndoDeltas", "always");
+                editor.session.setTabSize(4);
+                editor.setHighlightActiveLine(true);
+            };
 
-</script>
+            setEditor("java");
+            $("#setLanguage").click(function () {
+                language = document.querySelector('#language').value
+                setEditor(language)
+            })
+
+
+            const executeCodeBtn = document.querySelector('#submit_code');
+
+            executeCodeBtn.addEventListener('click', () => {
+                console.log("submit called")
+                const language = document.querySelector('#language').value;
+                console.log(language)
+                var userCode = editor.getValue().trim();
+                let formData = new FormData();
+                formData.append('code', userCode);
+                formData.append('language', language);
+                const url = document.getElementById('endpoint-url-div').getAttribute('url');
+                if (formData) {
+                    $.ajax({
+                        url: url,
+                        method: 'POST',
+                        data: formData,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data)
+                            if (data['result'])
+                                $('#output').html(data['result'])
+                        }
+
+                    });
+                }
+            });
+        });
+
+    </script>
 {% endblock content %}

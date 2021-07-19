@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Profile Form</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
 
-</head>
-<body>
 <form method="POST" enctype="multipart/form-data" >
     {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
+    <br>
+    {{ user_form | crispy }}
+    {{ profile_form | crispy }}
 
     <input type="submit" class="btn btn-primary">
+    <br><br>
 </form>
-</body>
-</html>
+{% endblock content %}

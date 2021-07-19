@@ -6,6 +6,7 @@
         console.log(language)
 
         function setEditor(language) {
+            console.log("setting editor for "+language)
             editor.setTheme("ace/theme/monokai");
             const url = "ace/mode/" + language
             editor.session.setMode(url);
@@ -18,6 +19,7 @@
             editor.session.setTabSize(4);
             editor.setHighlightActiveLine(true);
         };
+        setEditor("java");
 
         function setEditor_Input() {
             editor_input.setTheme("ace/theme/monokai");
@@ -38,6 +40,7 @@
         const executeCodeBtn = document.querySelector('.editor__run');
         const resetCodeBtn = document.querySelector('.editor__reset');
 
+        // Execute Code AJAX handling
         executeCodeBtn.addEventListener('click', () => {
             // Get input from the code editor
             const language = document.querySelector('#language').value;

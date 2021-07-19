@@ -3,25 +3,55 @@
 
 
 
-    <a class="btn btn-primary mt-5"href="{% url 'editProfile' %}">Edit Profile</a>
-    <h2>{{ object.user.username }}</h2>
-    <h5>{{ object.email }}</h5>
-    <h5>{{ object.first_name }}</h5>
-    <h5>{{ object.last_name }}</h5>
-    <img src="{{ object.picture.url }}">
-    <h5>{{ object.bio }}</h5>
-    <h5>{{ object.college }}</h5>
-    <h2>Submissions</h2>
+    <a class="btn btn-primary mt-5 edit-profile-btn" href="{% url 'editProfile' %}">Edit Profile</a>
+    <br><br>
+    <div class="container">
+        <div class="card" style="width:600px">
+            <div class="row">
+                <div class="col-sm-4">
+                    <img class="profile-image" src="{{ object.picture.url }}"
+                         alt="Card image"/>
+                </div>
+                <div class="col-sm-8">
+                    <div class="card-body-right">
+                        <table class="table">
+                            <tr><td><h5 class="card-title">{{ object.user.username }}</h5></td></tr>
+                            <tr><td><p class="card-text">{{ object.first_name }} {{ object.last_name }}</p></td></tr>
+                            <tr><td><p class="card-text">{{ object.bio }}</p></td></tr>
+                            <tr><td><p class="card-text">{{ object.college }}</p></td></tr>
+                        </table>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    <h2>{{ object.user.username }}</h2>#}
+{#    <h5>{{ object.email }}</h5>#}
+{#    <h5>{{ object.first_name }}</h5>#}
+{#    <h5>{{ object.last_name }}</h5>#}
+{#    <img src="{{ object.picture.url }}">#}
+{#    <h5>{{ object.bio }}</h5>#}
+{#    <h5>{{ object.college }}</h5>#}
+
+    <hr>
+    <h2>Submissions <span style="font-size: 1.3rem">(Last 5 submissions)</span></h2>
+
     <table class="table">
-    {% for submission in submissions %}
-        <tr>
-            <td>{{ submission.question.name }}</td>
+        {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.question.name }}</td>
                 <td>{{ submission.user.username }}</td>
                 <td>{{ submission.status }}</td>
                 <td>{{ submission.language }}</td>
                 <td>{{ submission.date }}</td>
-        </tr>
+            </tr>
 
-    {% endfor %}
+        {% endfor %}
     </table>
 {% endblock content %}

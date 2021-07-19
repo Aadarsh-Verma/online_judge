@@ -48,9 +48,9 @@ def EditProfileView(request):
 @login_required
 def ProfileView(request, pk):
     profile = Profile.objects.get(user_id=pk)
-    submissions = Submission.objects.filter(user_id=pk)
+    submissions = Submission.objects.filter(user_id=pk)[0:5]
     context = {
         'object': profile,
-        'submissions':submissions,
+        'submissions': submissions,
     }
     return render(request, 'authy/profile_detail.html', context)

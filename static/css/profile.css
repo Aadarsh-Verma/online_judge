@@ -1,0 +1,30 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+
+.profile-image {
+    position: relative;
+    margin-top: 50px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background-size: 1500px 150px;
+    width: 130px;
+    height: 130px;
+    /*background-repeat: no-repeat;*/
+    /*object-fit: contain;*/
+}
+
+.edit-profile-btn {
+    position: absolute;
+    top: 50px;
+    right: 350px;
+}
+
+
+.header__editor {
+    background-color: #007bff;
+    margin: 15px 0 0 0;
+    padding: 0;
+}
